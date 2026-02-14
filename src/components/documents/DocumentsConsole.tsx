@@ -4,28 +4,46 @@ import { useEffect, useState, useCallback } from "react";
 import { Search, Info, Upload } from "lucide-react"; // Info isn't used but might be good for tooltip later
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getDocuments, clearDocumentsState } from "@/features/documents/documentsSlice";
+import { RootState } from "@/store";
+import { DocumentsState } from "@/features/documents/documentsTypes";
 import { DocumentsStatCard } from "./DocumentsStatCard";
 import { DocumentsTable } from "./DocumentsTable";
 import { TextInput } from "@/components/ui/TextInput";
 import { useRouter } from "next/navigation";
 import { logout } from "@/features/auth/authSlice";
+import { DeleteConfirmationModal } from "./DeleteConfirmationModal";
 
 export function DocumentsConsole() {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const { token } = useAppSelector((state) => state.auth);
-    const { data, count, next, previous, loading, error } = useAppSelector((state) => state.documents);
+    const { data, count, next, previous, loading, error } = useAppSelector((state: RootState) => state.documents as DocumentsState);
     const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
 
-    // Initial Fetch
+    // Debounce Search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    // Fetch on mount and when search changes
     useEffect(() => {
         if (!token) return;
-        dispatch(getDocuments({ accessToken: token }));
+        if (debouncedSearch !== '') {
+            setPage(1);
+        }
+        dispatch(getDocuments({ accessToken: token, name: debouncedSearch }));
 
+        // Only cleanup on unmount
         return () => {
             dispatch(clearDocumentsState());
         };
-    }, [dispatch, token]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, token, debouncedSearch]);
 
     // Error Handling
     useEffect(() => {
@@ -37,15 +55,9 @@ export function DocumentsConsole() {
 
     const handlePageChange = useCallback((url: string | null) => {
         if (token && url) {
-            dispatch(getDocuments({ accessToken: token, url }));
+            dispatch(getDocuments({ accessToken: token, url, name: debouncedSearch }));
         }
-    }, [dispatch, token]);
-
-    // Client-side filtering
-    const filteredDocuments = data.filter(doc =>
-        doc.original_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        doc.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    }, [dispatch, token, debouncedSearch]);
 
     const [page, setPage] = useState(1);
     const PAGE_SIZE = 20; // Assumption, adjust if API default is different.
@@ -61,6 +73,46 @@ export function DocumentsConsole() {
     };
 
     const startIndex = (page - 1) * PAGE_SIZE;
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedDocumentId, setSelectedDocumentId] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDeleteClick = (id: number) => {
+        setSelectedDocumentId(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!token || !selectedDocumentId) return;
+
+        try {
+            setIsDeleting(true);
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            const baseUrl = apiUrl?.endsWith('/') ? apiUrl : `${apiUrl}/`;
+
+            const res = await fetch(`${baseUrl}documents/delete/${selectedDocumentId}/`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to delete document");
+            }
+
+            // Refresh list
+            dispatch(getDocuments({ accessToken: token, url: null, name: debouncedSearch })); // Reset to first page? Or current. Using current search context.
+        } catch (err) {
+            console.error("Delete failed", err);
+            alert("Failed to delete document. Please try again.");
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setSelectedDocumentId(null);
+        }
+    };
 
     return (
         <div className="space-y-8">
@@ -107,7 +159,7 @@ export function DocumentsConsole() {
                 {/* Documents Table Container */}
                 <div className="h-[600px]">
                     <DocumentsTable
-                        documents={filteredDocuments}
+                        documents={data}
                         loading={loading}
                         count={count}
                         next={next}
@@ -115,9 +167,18 @@ export function DocumentsConsole() {
                         onNext={handleNext}
                         onPrevious={handlePrevious}
                         startIndex={startIndex}
+                        onDelete={handleDeleteClick}
+                        searchQuery={searchQuery}
                     />
                 </div>
             </div>
+
+            <DeleteConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                isDeleting={isDeleting}
+            />
         </div>
     );
 }

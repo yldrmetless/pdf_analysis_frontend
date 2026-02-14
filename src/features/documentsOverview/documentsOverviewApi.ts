@@ -29,8 +29,11 @@ export const fetchOverviewStats = async (accessToken: string): Promise<OverviewS
     return fetchWithAuth("documents/overview/", accessToken);
 };
 
-export const fetchRecentDocuments = async (accessToken: string, url?: string | null): Promise<RecentDocumentsResponse> => {
-    const endpoint = url || "documents/recent-documents/";
+export const fetchRecentDocuments = async (accessToken: string, url?: string | null, search?: string): Promise<RecentDocumentsResponse> => {
+    let endpoint = url || "documents/recent-documents/";
+    if (search && !url) {
+        endpoint += `?document_name=${encodeURIComponent(search)}`;
+    }
     return fetchWithAuth(endpoint, accessToken);
 };
 

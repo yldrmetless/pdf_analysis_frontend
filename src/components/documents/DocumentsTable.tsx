@@ -2,6 +2,7 @@ import { Document } from "@/features/documents/documentsTypes";
 import { cn } from "@/lib/cn";
 import { ChevronLeft, ChevronRight, Eye, Trash, FileText, FileCode, FileSpreadsheet } from "lucide-react";
 import { formatBytes } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface DocumentsTableProps {
     documents: Document[];
@@ -12,6 +13,8 @@ interface DocumentsTableProps {
     onNext: () => void;
     onPrevious: () => void;
     startIndex: number;
+    onDelete: (id: number) => void;
+    searchQuery?: string;
 }
 
 export function DocumentsTable({
@@ -22,8 +25,12 @@ export function DocumentsTable({
     previous,
     onNext,
     onPrevious,
-    startIndex
+    startIndex,
+    onDelete,
+    searchQuery
 }: DocumentsTableProps) {
+    const router = useRouter();
+
     if (loading && documents.length === 0) {
         return (
             <div className="rounded-xl bg-[#0B0E14] border border-[#1F2937] p-6 animate-pulse">
@@ -52,16 +59,20 @@ export function DocumentsTable({
         }
     };
 
+    const handleRowClick = (docId: number) => {
+        router.push(`/dashboard/documents/document-detail/${docId}`);
+    };
+
     const endIndex = Math.min(startIndex + documents.length, count);
     const showingText = count > 0 ? `Showing ${startIndex + 1}-${endIndex} of ${count} documents` : "No documents";
 
     return (
         <div className={cn("flex flex-col h-full bg-[#0B0E14] border border-[#1F2937] rounded-xl overflow-hidden", loading && "opacity-80 pointer-events-none")}>
-            <div className="flex-1 overflow-x-auto">
+            <div className="flex-1 overflow-auto [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-700/50 [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:hover:bg-slate-600">
                 {documents.length === 0 ? (
                     <div className="h-64 flex flex-col items-center justify-center text-gray-500">
                         <FileText className="h-12 w-12 mb-4 opacity-20" />
-                        <p>No documents yet</p>
+                        <p>{searchQuery ? "No documents found matching your search" : "No documents yet"}</p>
                     </div>
                 ) : (
                     <table className="w-full text-left text-sm">
@@ -74,9 +85,13 @@ export function DocumentsTable({
                                 <th className="px-6 py-4 font-medium text-gray-400 uppercase text-xs tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#1F2937] cursor-pointer">
+                        <tbody className="divide-y divide-[#1F2937]">
                             {documents.map((doc) => (
-                                <tr key={doc.id} className="group hover:bg-white/5 transition-colors">
+                                <tr
+                                    key={doc.id}
+                                    onClick={() => handleRowClick(doc.id)}
+                                    className="group hover:bg-white/5 transition-colors cursor-pointer"
+                                >
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
                                             <div className="p-2 rounded bg-gray-800/50">
@@ -107,8 +122,11 @@ export function DocumentsTable({
                                     <td className="px-6 py-4 text-right">
                                         <button
                                             className="cursor-pointer p-1.5 text-gray-400 hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                            title="Coming soon"
-
+                                            title="Delete Document"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDelete(doc.id);
+                                            }}
                                         >
                                             <Trash className="h-4 w-4" />
                                         </button>

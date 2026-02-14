@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -16,21 +16,39 @@ export default function DashboardOverviewPage() {
     const router = useRouter();
     const { token } = useAppSelector((state) => state.auth);
     const { stats, recentDocuments, eventLog } = useAppSelector((state) => state.documentsOverview);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
 
-    // Initial Fetch
+    // Debounce Search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
+
+    // Fetch Data
     useEffect(() => {
         if (!token) return;
 
-        dispatch(getStats(token));
-        dispatch(getRecentDocs({ accessToken: token }));
-        dispatch(getEventLogs({ accessToken: token }));
+        // Fetch stats and event logs only on mount
+        if (debouncedSearch === "") {
+            dispatch(getStats(token));
+            dispatch(getEventLogs({ accessToken: token }));
+        }
 
-        // Clean up on unmount
+        // Fetch recent docs whenever search changes or on mount
+        dispatch(getRecentDocs({ accessToken: token, search: debouncedSearch }));
+
+    }, [dispatch, token, debouncedSearch]);
+
+    // Cleanup
+    useEffect(() => {
         return () => {
             dispatch(clearOverviewState());
         };
-
-    }, [dispatch, token]);
+    }, [dispatch]);
 
     // Error Handling for 401
     useEffect(() => {
@@ -72,6 +90,8 @@ export default function DashboardOverviewPage() {
                 <div className="w-full md:w-80">
                     <TextInput
                         placeholder="Search documents..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="bg-[#0B0E14] border-[#1F2937] text-white placeholder:text-gray-500"
                         leftIcon={<Search className="h-4 w-4 text-gray-500" />}
                     />
@@ -109,6 +129,7 @@ export default function DashboardOverviewPage() {
                         previous={recentDocuments.previous}
                         onNext={() => handleRecentDocsPage(recentDocuments.next)}
                         onPrevious={() => handleRecentDocsPage(recentDocuments.previous)}
+                        searchQuery={searchQuery}
                     />
                 </div>
 

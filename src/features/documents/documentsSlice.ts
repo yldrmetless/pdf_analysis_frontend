@@ -4,13 +4,13 @@ import { fetchDocuments } from "./documentsApi";
 
 export const getDocuments = createAsyncThunk<
     PaginatedDocumentsResponse,
-    { accessToken: string; url?: string | null },
+    { accessToken: string; url?: string | null; name?: string },
     { rejectValue: string }
 >(
     "documents/getDocuments",
-    async ({ accessToken, url }, { rejectWithValue }) => {
+    async ({ accessToken, url, name }, { rejectWithValue }) => {
         try {
-            return await fetchDocuments(accessToken, url);
+            return await fetchDocuments(accessToken, url, name);
         } catch (err: any) {
             if (err.message === "UNAUTHORIZED") {
                 return rejectWithValue("UNAUTHORIZED");

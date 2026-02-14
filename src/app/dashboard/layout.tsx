@@ -23,7 +23,7 @@ export default function DashboardLayout({
             />
 
             {/* Main Content Area */}
-            <main className="md:pl-64 pt-16 md:pt-0 min-h-screen">
+            <main className="md:pl-64 min-h-screen">
                 <div className="px-4 py-8 md:px-8 bg-[#050814]">
                     {children}
                 </div>

@@ -25,7 +25,10 @@ const fetchWithAuth = async (url: string, accessToken: string) => {
     return response.json();
 };
 
-export const fetchDocuments = async (accessToken: string, url?: string | null): Promise<PaginatedDocumentsResponse> => {
-    const endpoint = url || "documents/list/";
+export const fetchDocuments = async (accessToken: string, url?: string | null, name?: string): Promise<PaginatedDocumentsResponse> => {
+    let endpoint = url || "documents/list/";
+    if (name && !url) {
+        endpoint += `?name=${encodeURIComponent(name)}`;
+    }
     return fetchWithAuth(endpoint, accessToken);
 };

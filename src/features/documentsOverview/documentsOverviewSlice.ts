@@ -28,13 +28,13 @@ export const getStats = createAsyncThunk<
 
 export const getRecentDocs = createAsyncThunk<
     RecentDocumentsResponse,
-    { accessToken: string; url?: string | null },
+    { accessToken: string; url?: string | null; search?: string },
     { rejectValue: string }
 >(
     "documentsOverview/getRecentDocs",
-    async ({ accessToken, url }, { rejectWithValue }) => {
+    async ({ accessToken, url, search }, { rejectWithValue }) => {
         try {
-            return await fetchRecentDocuments(accessToken, url);
+            return await fetchRecentDocuments(accessToken, url, search);
         } catch (err: any) {
             if (err.message === "UNAUTHORIZED") {
                 return rejectWithValue("UNAUTHORIZED");

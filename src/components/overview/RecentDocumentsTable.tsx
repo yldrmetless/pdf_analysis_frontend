@@ -10,6 +10,7 @@ interface RecentDocumentsTableProps {
     onNext: () => void;
     onPrevious: () => void;
     count: number;
+    searchQuery?: string;
 }
 
 export function RecentDocumentsTable({
@@ -19,7 +20,8 @@ export function RecentDocumentsTable({
     previous,
     onNext,
     onPrevious,
-    count
+    count,
+    searchQuery
 }: RecentDocumentsTableProps) {
     if (loading && documents.length === 0) {
         return (
@@ -44,7 +46,7 @@ export function RecentDocumentsTable({
             <div className="flex-1 overflow-x-auto">
                 {documents.length === 0 ? (
                     <div className="h-full flex items-center justify-center text-gray-500 text-sm">
-                        No recent documents
+                        {searchQuery ? "No documents found matching your search" : "No recent documents"}
                     </div>
                 ) : (
                     <table className="w-full text-left text-sm">
