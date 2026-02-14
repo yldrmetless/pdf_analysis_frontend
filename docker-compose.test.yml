@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    command: npm run test
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CI=true
+    env_file:
+      - .env
