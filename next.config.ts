@@ -1,13 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig = {
-  /* Diğer ayarların */
+  /* Mevcut diğer ayarların buradaysa kalsın */
+
+  // Lint hatalarının build'i durdurmasını engeller
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // TypeScript tip hatalarının build'i durdurmasını engeller
   typescript: {
     ignoreBuildErrors: true,
   },
-} as NextConfig; // Burada 'as NextConfig' diyerek TS'i ikna ediyoruz.
+} as any; // TypeScript'i ikna etmek için 'as any' ekledik
 
 export default nextConfig;
