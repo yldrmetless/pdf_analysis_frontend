@@ -63,7 +63,7 @@ export function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
                     <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
                         <FileText className="h-5 w-5 text-white" />
                     </div>
-                    <span>DocuMind AI</span>
+                    <span>DocuMind AI App</span>
                 </div>
                 {/* Mobile Close Button */}
                 <button

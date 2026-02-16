@@ -17,7 +17,7 @@ export function DashboardMobileHeader({ onToggleSidebar }: MobileHeaderProps) {
                 <Menu className="h-6 w-6" />
             </button>
             <div className="flex items-center gap-2 font-semibold text-white">
-                <span>DocuMind AI</span>
+                <span>DocuMind AI App</span>
             </div>
         </header>
     );

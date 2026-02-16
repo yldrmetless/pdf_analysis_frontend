@@ -50,7 +50,7 @@ export default function LandingPage() {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/20 ring-1 ring-indigo-400/20">
                 <FileText className="h-5 w-5 text-indigo-200" />
               </div>
-              <span className="text-sm font-semibold tracking-wide">DocuMindAI</span>
+              <span className="text-sm font-semibold tracking-wide">DocuMindAIApp</span>
             </div>
 
             <nav className="hidden items-center gap-7 text-sm text-white/70 md:flex">
@@ -244,7 +244,7 @@ export default function LandingPage() {
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/20 ring-1 ring-indigo-400/20">
                     <FileText className="h-5 w-5 text-indigo-200" />
                   </div>
-                  <span className="text-sm font-semibold tracking-wide">DocuMindAI</span>
+                  <span className="text-sm font-semibold tracking-wide">DocuMindAIApp</span>
                 </div>
                 <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/55">
                   Exploring the intersection of Django, Next.js, and Vector Databases. Open-source RAG engine built for

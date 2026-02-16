@@ -71,7 +71,7 @@ export default function LoginPage() {
 
                     <div className="mt-5 text-center">
                         <div className="flex items-center justify-center gap-2 text-sm font-semibold text-white/85">
-                            <span>DocuMind AI</span>
+                            <span>DocuMind AI App</span>
                         </div>
                         <h1 className="mt-4 text-2xl font-semibold tracking-tight">Welcome back</h1>
                         <p className="mt-2 text-sm text-white/55">Enter your credentials to access your workspace.</p>
@@ -138,7 +138,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="pt-8 text-center text-[11px] tracking-wide text-white/30">
-                            © 2024 DocuMind AI. Secure Console Access.
+                            © {new Date().getFullYear()} DocuMind AI App  Secure Console Access.
                         </div>
                     </form>
                 </AuthCard>

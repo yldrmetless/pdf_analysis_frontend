@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "DocuMind AI",
+  title: "DocuMind AI App",
   description: "Talk to your documents instantly.",
 };
 
