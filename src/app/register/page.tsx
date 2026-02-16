@@ -170,7 +170,7 @@ export default function RegisterPage() {
                         </div>
 
                         <div className="pt-8 text-center text-[11px] tracking-wide text-white/30">
-                            DocuMind AI v2.0.4 • Secure 256-bit Encryption
+                            DocuMind AI APP v2.0.4 • Secure 256-bit Encryption
                         </div>
                     </form>
                 </AuthCard>
