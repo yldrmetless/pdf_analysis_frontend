@@ -54,10 +54,8 @@ export default function LandingPage() {
             </div>
 
             <nav className="hidden items-center gap-7 text-sm text-white/70 md:flex">
-              <Link className="hover:text-white" href="#">Documentation</Link>
-              <Link className="hover:text-white" href="#">Architecture</Link>
-              <Link className="hover:text-white" href="#">Benchmarks</Link>
-              <Link className="hover:text-white" href="#">GitHub</Link>
+              <Link className="hover:text-white" href="https://github.com/yldrmetless/DocuMindAIApp"
+              >GitHub</Link>
             </nav>
 
             <div className="flex items-center gap-4">
@@ -69,7 +67,7 @@ export default function LandingPage() {
               </Link>
 
               <Link
-                href="#"
+                href="https://github.com/yldrmetless/DocuMindAIApp"
                 className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/90 shadow-sm hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-indigo-400/40"
               >
                 <Star className="h-4 w-4" />
@@ -104,19 +102,10 @@ export default function LandingPage() {
 
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
               <Link
-                href="#"
+                href="https://github.com/yldrmetless/DocuMindAIApp"
                 className="inline-flex h-11 items-center justify-center rounded-xl bg-indigo-500 px-6 text-sm font-medium text-white shadow-[0_12px_30px_-12px_rgba(99,102,241,0.65)] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-300/50"
               >
                 View Source Code <span className="ml-2">&lt;&gt;</span>
-              </Link>
-              <Link
-                href="#"
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-white/12 bg-white/[0.03] px-6 text-sm font-medium text-white/90 hover:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-indigo-300/40"
-              >
-                <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-white/5">
-                  <Sparkles className="h-3.5 w-3.5 text-white/80" />
-                </span>
-                Architecture Guide
               </Link>
             </div>
           </div>
@@ -251,11 +240,8 @@ export default function LandingPage() {
                   high-performance retrieval.
                 </p>
                 <div className="mt-6 flex items-center gap-3 text-white/45">
-                  <Link className="rounded-lg border border-white/10 bg-white/[0.03] p-2 hover:bg-white/[0.06]" href="#">
+                  <Link className="rounded-lg border border-white/10 bg-white/[0.03] p-2 hover:bg-white/[0.06]" href="https://github.com/yldrmetless/DocuMindAIApp">
                     <Github className="h-4 w-4" />
-                  </Link>
-                  <Link className="rounded-lg border border-white/10 bg-white/[0.03] p-2 hover:bg-white/[0.06]" href="#">
-                    <BookOpen className="h-4 w-4" />
                   </Link>
                 </div>
               </div>
@@ -265,9 +251,8 @@ export default function LandingPage() {
                   <div>
                     <div className="text-xs font-semibold tracking-widest text-white/50">PROJECT</div>
                     <ul className="mt-4 space-y-2 text-sm text-white/60">
-                      <li><Link className="hover:text-white" href="#">Source Code</Link></li>
-                      <li><Link className="hover:text-white" href="#">Architecture Guide</Link></li>
-                      <li><Link className="hover:text-white" href="#">Documentation</Link></li>
+                      <li><Link className="hover:text-white" href="https://github.com/yldrmetless/DocuMindAIApp"
+                      >Source Code</Link></li>
                     </ul>
                   </div>
                   <div>
@@ -291,13 +276,14 @@ export default function LandingPage() {
             </div>
 
             <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 md:flex-row md:items-center md:justify-between">
-              <div className="text-xs text-white/45">Built with precision © 2024</div>
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="text-xs text-white/45">
+                Build with precision © {new Date().getFullYear()}
+              </div>              <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[11px] text-emerald-200">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> LIVE DEMO STATUS: OPERATIONAL
                 </span>
                 <Link
-                  href="#"
+                  href="https://github.com/yldrmetless/DocuMindAIApp"
                   className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/80 hover:bg-white/[0.06]"
                 >
                   <Star className="h-4 w-4" /> Star on GitHub
